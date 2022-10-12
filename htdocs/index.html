@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ブラウザOSC検証</title>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/osc@2.4.2/dist/osc-browser.min.js"></script>
+    <script type="text/javascript">
+        const port = new osc.WebSocketPort({
+            url: "ws://localhost:8081"
+        });
+        port.open();
+        let active = false;
+
+        const clap = function () {
+            const btnElm = document.getElementById("clap");
+            if (!active) {
+                port.send({
+                    address: "/avatar/parameters/VRCEmote",
+                    args: [2]
+                });
+                active = true;
+                btnElm.innerText = "止める";
+            } else {
+                port.send({
+                    address: "/avatar/parameters/VRCEmote",
+                    args: [false]
+                });
+                active = false;
+                btnElm.innerText = "拍手";
+            }
+        };
+    </script>
+</head>
+
+<body>
+    <p>ブラウザOSC検証</p>
+    <button onclick="clap()" id="clap">拍手</button>
+    <p>参考：<br>
+        <a href="https://qiita.com/youtoy/items/0f170f4f86f6d7bf52ad" target="_blank">https://qiita.com/youtoy/items/0f170f4f86f6d7bf52ad</a><br>
+        <a href="https://qiita.com/mininobu/items/b45dbc70faedf30f484e" target="_blank">https://qiita.com/mininobu/items/b45dbc70faedf30f484e</a>
+    </p>
+</body>
+
+</html>
